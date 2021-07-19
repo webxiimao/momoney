@@ -30,6 +30,9 @@ const defaultData = {
   winner: ''
 }
 
+let isConnect = true
+let timer = 3000
+
 Page({
   data: {
     userInfo: {} as any,
@@ -70,6 +73,27 @@ Page({
       title: '一起来玩吧！大富翁，冲冲冲！',
       path: `pages/index/index?roomId=${this.data.roomId}`
     }
+  },
+  _heart() {
+    setTimeout(() => {
+      isConnect = false
+      sendSocket.ping()
+      setTimeout(() => {
+        if (!isConnect) {
+          wx.connectSocket({
+            url: "ws://127.0.0.1:8888",
+            success(res) {
+              console.log('websocket连接成功', res);
+            },
+            fail(err){
+              console.error(err);
+            }
+          })
+        }else {
+          this._heart()
+        }
+      }, timer);
+    }, timer)
   },
   onLoad() {
     wx.showShareMenu({
@@ -136,6 +160,7 @@ Page({
           console.log('login');
           
           wx.onSocketOpen(() => {
+            self._heart()
             sendSocket.login({
               username: self.data.userInfo?.nickName as string,
               unionId: openid,
@@ -145,6 +170,8 @@ Page({
           wx.onSocketMessage((res) => {
             const { flag, props } = getSocketResponse(res.data as string)
             switch (flag){
+              case 'ping':
+                self.socketPing()
               case 'login':
                 self.socketLogin(props)
                 break
@@ -193,6 +220,10 @@ Page({
     }, () => {
       this.getStatus()
     })
+  },
+
+  socketPing() {
+    isConnect = true
   },
 
   socketLog(data:any) {
