@@ -65,11 +65,14 @@ async function login(data: any, client) {
   point = user.get('point');
   /** 状态流转为准备中 */
   await user.updateOne({ status: UserStatus.Preparing });
+  console.log('game status', room.get('status'));
   /** 如果游戏状态未开始，则重置金钱 */
-  if (room.get('status') === GameStatus.Preparing) {
-      /** fix: 这里异步了，所以point得到的还是旧的，但实际已经更新为15000了 */
-      await user.updateOne({ room: room._id, point: constants.INIT_POINT });
-      point = constants.INIT_POINT;
+  if (!room.get('status') || room.get('status') === GameStatus.Preparing) {
+    await user.updateOne({ room: room._id, point: constants.INIT_POINT });
+    /** fix: 这里异步了，所以point得到的还是旧的，但实际已经更新为15000了 */
+    point = constants.INIT_POINT;
+  } else {
+    await user.updateOne({ room: room._id });
   }
   console.log('point', point);
   // 发送给当前用户积分和房间信息

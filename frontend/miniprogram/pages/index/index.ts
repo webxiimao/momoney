@@ -1,6 +1,6 @@
 // index.ts
 // 获取应用实例
-import { post } from '../../services/fetch'
+import { post, BaseUrl, WsUrl } from '../../services/fetch'
 import sendSocket from '../../services/socketService/sendSocket'
 import { getSocketResponse } from '../../utils/socketUtils'
 //@ts-ignore
@@ -29,9 +29,6 @@ const defaultData = {
   isOwner: false,
   winner: ''
 }
-
-let isConnect = true
-let timer = 3000
 
 Page({
   data: {
@@ -73,27 +70,6 @@ Page({
       title: '一起来玩吧！大富翁，冲冲冲！',
       path: `pages/index/index?roomId=${this.data.roomId}`
     }
-  },
-  _heart() {
-    setTimeout(() => {
-      isConnect = false
-      sendSocket.ping()
-      setTimeout(() => {
-        if (!isConnect) {
-          wx.connectSocket({
-            url: "ws://127.0.0.1:8888",
-            success(res) {
-              console.log('websocket连接成功', res);
-            },
-            fail(err){
-              console.error(err);
-            }
-          })
-        }else {
-          this._heart()
-        }
-      }, timer);
-    }, timer)
   },
   onLoad() {
     wx.showShareMenu({
@@ -137,7 +113,7 @@ Page({
     console.log('用户信息', self.data.userInfo);
     wx.login({
       success(wxres) {
-        post('http://127.0.0.1:9000/api/login', { code: wxres.code }).then((res: any) => {
+        post(BaseUrl + '/api/login', { code: wxres.code }).then((res: any) => {
           const openid = res.data.openid
           self.setData({
             unionId: openid
@@ -149,7 +125,7 @@ Page({
           console.log('返回的用户信息', res);
           // 连接websocket
           wx.connectSocket({
-            url: "ws://127.0.0.1:8888",
+            url: WsUrl,
             success(res) {
               console.log('websocket连接成功', res);
             },
@@ -160,18 +136,33 @@ Page({
           console.log('login');
           
           wx.onSocketOpen(() => {
-            self._heart()
+            // self._heart()
+            console.log('self.data.roomId', self.data.roomId);
             sendSocket.login({
               username: self.data.userInfo?.nickName as string,
               unionId: openid,
               roomId: self.data.roomId
             })
           })
+          wx.onSocketError(err => {
+            console.error('socket失败', err);
+            wx.connectSocket({
+              url: WsUrl,
+              success(res) {
+                console.log('websocket连接成功', res);
+              },
+              fail(err){
+                console.error(err);
+              }
+            })
+          })
           wx.onSocketMessage((res) => {
             const { flag, props } = getSocketResponse(res.data as string)
+            console.log('flag', flag);
             switch (flag){
               case 'ping':
                 self.socketPing()
+                break
               case 'login':
                 self.socketLogin(props)
                 break
@@ -313,10 +304,10 @@ Page({
             title: '交易（银行 ）',
             content: `确定向银行支付¥${value}？`,
             onConfirm() {
-              sendSocket.bankBusiness({
-                amount: value,
-                type: 'minus'
-              })
+                sendSocket.bankBusiness({
+                  amount: value,
+                  type: 'minus'
+                })
             },
         })
           // return true
