@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var socketUtils_1 = require("../../../utils/socketUtils");
+var login = function (props) {
+    wx.sendSocketMessage({
+        data: socketUtils_1.wsRequest({ path: 'login', props: props }),
+    });
+};
+exports.default = login;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibG9naW4uanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJsb2dpbi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLDBEQUFzRDtBQVF0RCxJQUFNLEtBQUssR0FBRyxVQUFDLEtBQWlCO0lBQzlCLEVBQUUsQ0FBQyxpQkFBaUIsQ0FBQztRQUNuQixJQUFJLEVBQUUsdUJBQVMsQ0FBQyxFQUFDLElBQUksRUFBRSxPQUFPLEVBQUUsS0FBSyxFQUFFLEtBQUssRUFBQyxDQUFDO0tBQy9DLENBQUMsQ0FBQTtBQUNKLENBQUMsQ0FBQTtBQUNELGtCQUFlLEtBQUssQ0FBQSIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IHdzUmVxdWVzdCB9IGZyb20gJy4uLy4uLy4uL3V0aWxzL3NvY2tldFV0aWxzJ1xuXG5pbnRlcmZhY2UgTG9naW5Qcm9wcyB7XG4gIHVzZXJuYW1lOiBzdHJpbmdcbiAgdW5pb25JZDogc3RyaW5nXG4gIHJvb21JZD86IHN0cmluZ1xufVxuXG5jb25zdCBsb2dpbiA9IChwcm9wczogTG9naW5Qcm9wcykgPT4ge1xuICB3eC5zZW5kU29ja2V0TWVzc2FnZSh7XG4gICAgZGF0YTogd3NSZXF1ZXN0KHtwYXRoOiAnbG9naW4nLCBwcm9wczogcHJvcHN9KSxcbiAgfSlcbn1cbmV4cG9ydCBkZWZhdWx0IGxvZ2luXG4iXX0=

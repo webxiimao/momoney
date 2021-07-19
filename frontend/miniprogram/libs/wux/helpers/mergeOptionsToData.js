@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var mergeOptionsToData=function(){var e,t=Object.assign({},0<arguments.length&&void 0!==arguments[0]?arguments[0]:{});for(e in t)t.hasOwnProperty(e)&&"function"==typeof t[e]&&delete t[e];return t},_default=mergeOptionsToData;exports.default=mergeOptionsToData;

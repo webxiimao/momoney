@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var socketUtils_1 = require("../../../utils/socketUtils");
+var start = function (props) {
+    wx.sendSocketMessage({
+        data: socketUtils_1.wsRequest({ path: 'game_start', props: props }),
+    });
+};
+exports.default = start;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic3RhcnQuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJzdGFydC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLDBEQUFzRDtBQU10RCxJQUFNLEtBQUssR0FBRyxVQUFDLEtBQWlCO0lBQzlCLEVBQUUsQ0FBQyxpQkFBaUIsQ0FBQztRQUNuQixJQUFJLEVBQUUsdUJBQVMsQ0FBQyxFQUFDLElBQUksRUFBRSxZQUFZLEVBQUUsS0FBSyxFQUFFLEtBQUssRUFBQyxDQUFDO0tBQ3BELENBQUMsQ0FBQTtBQUNKLENBQUMsQ0FBQTtBQUNELGtCQUFlLEtBQUssQ0FBQSIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IHdzUmVxdWVzdCB9IGZyb20gJy4uLy4uLy4uL3V0aWxzL3NvY2tldFV0aWxzJ1xuXG5pbnRlcmZhY2UgU3RhcnRQcm9wcyB7XG4gIHJvb21JZDogc3RyaW5nXG59XG5cbmNvbnN0IHN0YXJ0ID0gKHByb3BzOiBTdGFydFByb3BzKSA9PiB7XG4gIHd4LnNlbmRTb2NrZXRNZXNzYWdlKHtcbiAgICBkYXRhOiB3c1JlcXVlc3Qoe3BhdGg6ICdnYW1lX3N0YXJ0JywgcHJvcHM6IHByb3BzfSksXG4gIH0pXG59XG5leHBvcnQgZGVmYXVsdCBzdGFydFxuIl19

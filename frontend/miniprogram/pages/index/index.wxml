@@ -1,0 +1,48 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="userinfo">
+    <block wx:if="{{!hasUserInfo}}">
+      <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 老板登录吧 </button>
+      <view wx:else> 请使用1.4.4及以上版本基础库 </view>
+    </block>
+    <block wx:elif="{{btnStatus == 'over'}}">{{winner}}</block>
+    <block wx:elif="{{btnStatus !== 'start'}}">
+      <button open-type="share"> 邀请进房间 </button>
+    </block>
+  </view>
+  <view wx:if="{{isGameStart}}" class="point-container" >
+    <text class="point">¥{{point}}</text>
+  </view>
+  <view class="action" wx:if="{{btnStatus === 'start'}}" bindtap="action">
+    <text class="action-num" bindtap="action">搞</text>
+  </view>
+  <view class="action" wx:if="{{btnStatus === 'nostart_owner'}}" bindtap="start">
+    <text class="action-num">开始</text>
+  </view>
+  <view class="action" wx:if="{{btnStatus === 'nostart_player'}}">
+    <text class="action-num">等待中</text>
+  </view>
+  <view class="action-text" wx:if="{{btnStatus === 'over'}}">
+    <text class="action-num">代码有点矬，下个版本再搞，重启小程序吧</text>
+  </view>
+  <view class="footer">
+    <text class="footer-text" wx:if="{{btnStatus === 'start'}}" bindtap="endGame">结束游戏</text>
+  </view>
+  <i-action-sheet visible="{{ visible }}" actions="{{ actions }}" show-cancel bind:cancel="handleCancel" bind:click="handleClickItem" />
+  <wux-keyboard id="wux-keyboard" />
+  <wux-dialog id="wux-dialog" />
+</view>
+<wux-popup closable visible="{{ qrcodeVisible }}" title="我的收款码">
+    <view slot="footer" class="popup__button" bindtap="qrcodeClose">OK</view>
+    <view class="qrcode">
+      <wux-qrcode
+      class="qrcode"
+      id="qrcode"
+      data="{{ unionId }}"
+      width="200"
+      height="200"
+    />
+    </view>
+</wux-popup>
+<wux-toast id="wux-toast" />
+<wux-notification id="wux-notification" />

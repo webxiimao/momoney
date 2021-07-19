@@ -1,0 +1,26 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/logs/logs"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "Weixin",
+    "navigationBarTextStyle": "black"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "usingComponents": {
+    "i-action-sheet": "./libs/iview/action-sheet/index",
+    "wux-keyboard": "./libs/wux/keyboard/index",
+    "wux-popup": "./libs/wux/popup/index",
+    "wux-backdrop": "./libs/wux/backdrop/index",
+    "wux-animation-group": "./libs/wux/animation-group/index",
+    "wux-dialog": "./libs/wux/dialog/index",
+    "wux-qrcode": "./libs/wux/qrcode/index",
+    "wux-button": "./libs/wux/button/index",
+    "wux-toast": "./libs/wux/toast/index",
+    "wux-notification": "./libs/wux/notification/index"
+  }
+}

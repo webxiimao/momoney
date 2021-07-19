@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <input type="button" value="点击" onclick="cc()">
+  <input type="button" value="支付" onclick="pay()">
+  <input type="button" value="开始" onclick="start()">
+  <input type="button" value="结束" onclick="over()">
+  <script>
+    let isHeart = true
+    var CreateWebSocket = (function () {
+        return function (urlValue) {
+            if(window.WebSocket) return new WebSocket(urlValue);
+            if(window.MozWebSocket) return new MozWebSocket(urlValue);
+            return false;
+        }
+    })();
+    /* 实例化 WebSocket 连接对象, 地址为 ws 协议 */
+    var webSocket = CreateWebSocket("ws://localhost:8888");
+    function heart() {
+      setTimeout(() => {
+        isHeart = false
+        if(webSocket)webSocket.send(JSON.stringify({ path: 'ping' }))
+        setTimeout(() => {
+          if (!isHeart) {
+            webSocket = null
+            webSocket = CreateWebSocket("ws://localhost:8888");
+            isHeart = true
+          }else {
+            heart()
+          }
+        }, 3000);
+      }, 3000)
+    }
+    // 监听open事件
+    webSocket.addEventListener("open", () => {
+      webSocket.send(JSON.stringify({ path: 'login', props: { username: "user1", unionId: "user2"} }))
+      heart()
+    })
+
+    webSocket.addEventListener("message", function(msg) {
+      const data = JSON.parse(msg.data)
+      console.log(data);
+      if (data.data.flag === 'ack') {
+        console.log('get ack');
+        isHeart = true
+      }
+    })
+
+    function cc() {
+      webSocket.send(JSON.stringify({ path: 'bank_business', props: { type: 'minus', amount: 20 } }))
+    }
+
+    function pay() {
+      webSocket.send(JSON.stringify({ path: 'man_business', props: {receiveUnionId: 'user1', amount: 300} }))
+    }
+
+    function start() {
+      webSocket.send(JSON.stringify({ path: 'game_start', props: { roomId: '60f53911970157136c2024da' } }))
+    }
+    function over() {
+      webSocket.send(JSON.stringify({ path: 'game_over' }))
+    }
+    // webSocket
+  </script>
+</body>
+</html>

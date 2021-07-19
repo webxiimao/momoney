@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var socketUtils_1 = require("../../../utils/socketUtils");
+var bankBusiness = function (props) {
+    wx.sendSocketMessage({
+        data: socketUtils_1.wsRequest({ path: 'bank_business', props: props }),
+    });
+};
+exports.default = bankBusiness;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYmFua0J1c2luZXNzLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiYmFua0J1c2luZXNzLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUEsMERBQXNEO0FBT3RELElBQU0sWUFBWSxHQUFHLFVBQUMsS0FBWTtJQUNoQyxFQUFFLENBQUMsaUJBQWlCLENBQUM7UUFDbkIsSUFBSSxFQUFFLHVCQUFTLENBQUMsRUFBQyxJQUFJLEVBQUUsZUFBZSxFQUFFLEtBQUssRUFBRSxLQUFLLEVBQUMsQ0FBQztLQUN2RCxDQUFDLENBQUE7QUFDSixDQUFDLENBQUE7QUFDRCxrQkFBZSxZQUFZLENBQUEiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyB3c1JlcXVlc3QgfSBmcm9tICcuLi8uLi8uLi91dGlscy9zb2NrZXRVdGlscydcblxuaW50ZXJmYWNlIFByb3BzIHtcbiAgYW1vdW50OiBudW1iZXIsXG4gIHR5cGU6ICdhZGQnIHwgJ21pbnVzJ1xufVxuXG5jb25zdCBiYW5rQnVzaW5lc3MgPSAocHJvcHM6IFByb3BzKSA9PiB7XG4gIHd4LnNlbmRTb2NrZXRNZXNzYWdlKHtcbiAgICBkYXRhOiB3c1JlcXVlc3Qoe3BhdGg6ICdiYW5rX2J1c2luZXNzJywgcHJvcHM6IHByb3BzfSksXG4gIH0pXG59XG5leHBvcnQgZGVmYXVsdCBiYW5rQnVzaW5lc3NcbiJdfQ==
