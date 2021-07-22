@@ -28,7 +28,7 @@ async function over(props:any, client: ws) {
   if (winnerClient) {
     winnerClient.send(wsResponse('winning', { }));
   }
-  await UserModel.updateMany({ unionId: { $in: room.users } }, { room: null });
+  await UserModel.updateMany({ unionId: { $in: room.users } }, { room: null, status: UserStatus.NoGame });
 }
 
 export default over;

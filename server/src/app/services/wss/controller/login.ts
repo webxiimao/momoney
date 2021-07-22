@@ -8,6 +8,8 @@ import constants from '../../../configs/constants';
 async function login(data: any, client) {
   console.log('wsslogin', data);
   const { username, unionId, roomId } = data;
+  console.log('房间id', roomId);
+
   /** 重新登录，删除存储的旧的client */
   const oldClient = clientsMap.get(unionId);
   if (oldClient) {
@@ -42,7 +44,7 @@ async function login(data: any, client) {
     }
   } else {
     room = await RoomModel.findById(user.get('room')).exec();
-    console.log('room', room);
+    console.log('当前房间', room);
     // 如果游戏还未开始，判断是否有roomId
     if (roomId) {
       if (room && room.get('gameStatus') === GameStatus.Preparing) {
@@ -63,18 +65,19 @@ async function login(data: any, client) {
     await room.save();
   }
   point = user.get('point');
+  console.log('数据库中的point', point);
   /** 状态流转为准备中 */
   await user.updateOne({ status: UserStatus.Preparing });
-  console.log('game status', room.get('status'));
+  console.log('当前游戏状态', room.get('gameStatus'));
   /** 如果游戏状态未开始，则重置金钱 */
-  if (!room.get('status') || room.get('status') === GameStatus.Preparing) {
+  if (!room.get('gameStatus') || room.get('gameStatus') === GameStatus.Preparing) {
     await user.updateOne({ room: room._id, point: constants.INIT_POINT });
     /** fix: 这里异步了，所以point得到的还是旧的，但实际已经更新为15000了 */
     point = constants.INIT_POINT;
   } else {
     await user.updateOne({ room: room._id });
   }
-  console.log('point', point);
+  console.log('当前用户积分', point);
   // 发送给当前用户积分和房间信息
   await client.send(wsResponse('login', {
  point, roomId: room.get('id'), isOwner: room.get('owner') === unionId, isGameStart: room.get('gameStatus') === GameStatus.Processing

@@ -21,6 +21,7 @@
     "wux-qrcode": "./libs/wux/qrcode/index",
     "wux-button": "./libs/wux/button/index",
     "wux-toast": "./libs/wux/toast/index",
-    "wux-notification": "./libs/wux/notification/index"
+    "wux-notification": "./libs/wux/notification/index",
+    "wux-loading": "./libs/wux/loading/index"
   }
 }

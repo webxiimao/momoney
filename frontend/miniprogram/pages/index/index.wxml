@@ -11,7 +11,7 @@
     </block>
   </view>
   <view wx:if="{{isGameStart}}" class="point-container" >
-    <text class="point">¥{{point}}</text>
+    <text class="point">${{point}}</text>
   </view>
   <view class="action" wx:if="{{btnStatus === 'start'}}" bindtap="action">
     <text class="action-num" bindtap="action">搞</text>
@@ -45,4 +45,5 @@
     </view>
 </wux-popup>
 <wux-toast id="wux-toast" />
+<wux-loading id="wux-loading" />
 <wux-notification id="wux-notification" />

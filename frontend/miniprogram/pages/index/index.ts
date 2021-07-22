@@ -3,8 +3,10 @@
 import { post, BaseUrl, WsUrl } from '../../services/fetch'
 import sendSocket from '../../services/socketService/sendSocket'
 import { getSocketResponse } from '../../utils/socketUtils'
+// @ts-ignore
+import CountUp from '../../libs/countup/countup.js';
 //@ts-ignore
-import { $wuxKeyBoard, $wuxDialog, $wuxToast, $wuxNotification } from '../../libs/wux/index'
+import { $wuxKeyBoard, $wuxDialog, $wuxToast, $wuxNotification, $wuxLoading } from '../../libs/wux/index'
 enum BtnStatus {
   /** 游戏已经开始 */
   START = 'start',
@@ -43,16 +45,16 @@ Page({
     qrcodeVisible: false,
     actions: [
       {
-          name: '支付银行',
+          name: '支付给银行',
       },
       {
-          name: '付款'
+        name: '从银行取钱'
       },
       {
-        name: '取钱'
+          name: '付款给他人'
       },
       {
-        name: '二维码'
+        name: '收款二维码'
       },
       {
           name: '破产',
@@ -87,7 +89,7 @@ Page({
       })
       console.log(query.roomId);
     }
-    //@ts-ignore
+    this.$wuxLoading = $wuxLoading()
   },
   getStatus() {
     const { isOwner, isGameStart, isGameOver } = this.data
@@ -118,6 +120,24 @@ Page({
           self.setData({
             unionId: openid
           })
+          wx.onAppShow(() => {
+            console.log('重连websocket');
+            wx.showLoading({
+              title: '重连中'
+            })
+            wx.connectSocket({
+              url: WsUrl,
+              success(res) {
+                console.log('websocket连接成功', res);
+              },
+              fail(err){
+                console.error(err);
+              },
+              complete() {
+                wx.hideLoading()
+              }
+            })
+          })
           wx.setStorage({
             key: 'MOMONEY_OPENID',
             data: openid
@@ -145,24 +165,16 @@ Page({
             })
           })
           wx.onSocketError(err => {
-            console.error('socket失败', err);
-            wx.connectSocket({
-              url: WsUrl,
-              success(res) {
-                console.log('websocket连接成功', res);
-              },
-              fail(err){
-                console.error(err);
-              }
-            })
+            console.error("websocket失败", err);
+            // self.$wuxLoading.show({
+            //   text: '断线重连中...',
+            // })
+            
           })
           wx.onSocketMessage((res) => {
             const { flag, props } = getSocketResponse(res.data as string)
             console.log('flag', flag);
             switch (flag){
-              case 'ping':
-                self.socketPing()
-                break
               case 'login':
                 self.socketLogin(props)
                 break
@@ -213,10 +225,6 @@ Page({
     })
   },
 
-  socketPing() {
-    isConnect = true
-  },
-
   socketLog(data:any) {
     $wuxNotification().show({
       title: '通知',
@@ -229,19 +237,22 @@ Page({
     console.log('游戏登录', data);
     const { point, isOwner, roomId, isGameStart } = data
     this.setData({
-      point,
+      // point,
       isOwner,
       roomId,
       isGameStart
     }, () => {
       this.getStatus()
     })
+    this.countUp = new CountUp('point', point, {duration: 1}, this)
+    this.countUp.start();
   },
   socketBusiness(data: any) {
     const { point } = data
-    this.setData({
-      point,
-    })
+    // this.setData({
+    //   point,
+    // })
+    this.countUp.update(point);
   },
   socketStart() {
     this.setData({
@@ -313,7 +324,7 @@ Page({
           // return true
       },
     }) 
-    } else if (index === 1) {
+    } else if (index === 2) {
       wx.scanCode({
         onlyFromCamera: true,
         scanType: ['qrCode'],
@@ -356,7 +367,7 @@ Page({
         })
         }
       })
-    }else if (index === 2) {
+    }else if (index === 1) {
       //@ts-ignore
       $wuxKeyBoard().show({
         maxlength: -1,

@@ -6,8 +6,10 @@ interface Options {
   [key: string]: any
 }
 
-export const BaseUrl = "http://172.20.10.3:9000"
-export const WsUrl = "ws://172.20.10.3:8888"
+export const host = '172.20.10.3'
+
+export const BaseUrl = `http://${host}:9000`
+export const WsUrl = `ws://${host}:8888`
 
 const fetch = (options: Options) => {
   const { url, data, method } = options
